@@ -20,7 +20,6 @@ public class Screen4Activity extends AppCompatActivity {
 
 		textView = (TextView) findViewById(R.id.textview4);
 		textView.setText(getIntent().getStringExtra(EXTRA_MESSAGE));
-		button = (Button) findViewById(R.id.backbtn_4);
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick (final View v) {
