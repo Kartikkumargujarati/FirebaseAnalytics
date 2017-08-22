@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
+		FirebaseCrash.report(new Exception("My first Android non-fatal error"));
 		btn1 = (Button) findViewById(R.id.btn_1);
 		btn1.setOnClickListener(this);
 		btn2 = (Button) findViewById(R.id.btn_2);
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	/* ------------------------------------ End Lifecycle Methods ------------------------------------ */
 
+
 	@Override
 	public void onClick(View v){
 
@@ -49,29 +51,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			case R.id.btn_1:
 				intent = new Intent(this, Screen1Activity.class);
 				intent.putExtra(EXTRA_MESSAGE, "Welcome to Screen 1");
-				bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Button 1 Clicked");
+				bundle.putString("ButtonName", "Button 1");
 				break;
 			case R.id.btn_2:
 				intent = new Intent(this, Screen2Activity.class);
 				intent.putExtra(EXTRA_MESSAGE, "Welcome to Screen 2");
-				bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Button 2 Clicked");
-
+				bundle.putString("ButtonName", "Button 2");
 				break;
 			case R.id.btn_3:
 				intent = new Intent(this, Screen3Activity.class);
 				intent.putExtra(EXTRA_MESSAGE, "Welcome to Screen 3");
-				bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Button 3 Clicked");
-
+				bundle.putString("ButtonName", "Button 3");
 				break;
 			case R.id.btn_4:
 				intent = new Intent(this, Screen4Activity.class);
 				intent.putExtra(EXTRA_MESSAGE, "Welcome to Screen 4");
-				bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Button 4 Clicked");
-
+				bundle.putString("ButtonName", "Button 4");
 				break;
 		}
-		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+		getFirebaseAnalyticsInstance().setCurrentScreen(this, getClass().getSimpleName(), null);
+		getFirebaseAnalyticsInstance().logEvent("ButtonClicked", bundle);
 
 		startActivity(intent);
+	}
+
+	private FirebaseAnalytics getFirebaseAnalyticsInstance () {
+		return mFirebaseAnalytics;
 	}
 }
